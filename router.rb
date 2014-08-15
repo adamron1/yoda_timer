@@ -1,10 +1,14 @@
 require_relative 'controller'
 require_relative 'list'
+require_relative 'router'
+require_relative 'viewer'
+require_relative 'timer'
 
 class Yoda
 
   def initialize
-    #things_to_say
+    @controller = Controller.new
+    @controller.welcome
   end
 
   ADD_COMMAND = 'add'
@@ -12,11 +16,11 @@ class Yoda
   DISPLAY_COMMAND = 'display'
   SELECT_COMMAND = 'select'
   YES = 'y'
+  NO = 'n'
 
 
   def start
-    @controller = Controller.new
-    puts "What do you want to do? (add, exit, select, display)"
+    @controller.enter_task
     user_input = gets.chomp.split(" ")
     @command = user_input.shift.downcase
     @arguement = user_input.join(" ")
@@ -26,14 +30,12 @@ class Yoda
   def to_controller
     if @command == ADD_COMMAND
       @controller.add(@arguement)
-      puts "ADDING #{@arguement}"
       start
     elsif @command == SELECT_COMMAND
       @controller.select(@arguement)
-      puts "SELECTING #{@arguement}"
       start
     elsif @command == DISPLAY_COMMAND
-      controller.display
+      @controller.display
     elsif @command == QUIT_COMMAND
       puts "EXITING YODA"
     else
@@ -45,6 +47,9 @@ class Yoda
   def finished?
     puts "Are you finished with the exercise (y/n)?"
     new_input = gets.chomp
+    if new_input == no
+
+    end
   end
 
   def things_to_say

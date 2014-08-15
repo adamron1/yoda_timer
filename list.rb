@@ -1,6 +1,5 @@
 require 'csv'
 
-
 class List
 
   attr_reader :list
@@ -10,17 +9,16 @@ class List
     CSV.foreach("data.csv") do |row|
       @list << Task.new(row)
     end
-    p @list
   end
 
   def add(arg)
-    @list << Task.new([nil,arg,false,false])
+    @list << Task.new([arg,false,false])
     save
   end
 
   def save
     CSV.open("data.csv", "wb") do |csv|
-      list.each {|row| csv << [row.number, row.description, row.complete, row.attempted] }
+      list.each {|row| csv <<  [row.description, row.complete, row.attempted] }
     end
   end
 
@@ -32,15 +30,12 @@ class List
 end
 
 class Task
-  attr_reader :number, :description, :complete, :attempted
+  attr_reader :description, :complete, :attempted
 
   def initialize(arg)
-    @@item_num ||= 1
-    @number = @@item_num
-    @@item_num +=1
-    @description = arg[1]
-    @complete = arg[2] == 'true'
-    @attempted =  arg[3] == 'true'
+    @description = arg[0]
+    @complete = arg[1] == 'true'
+    @attempted =  arg[2] == 'true'
   end
 
 
